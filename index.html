@@ -2,54 +2,23 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-  <title>피젯 토이 1 : 버튼</title>
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>피젯 버튼</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
 <div id="app">
+  <div id="count">0</div>
 
-  <header>
-    <button id="resetBtn">초기화</button>
-    <h1>피젯 토이 1</h1>
-    <p>딸깍 버튼</p>
-  </header>
+  <div id="switch" class="switch off">
+    <div class="top">I</div>
+    <div class="middle"></div>
+    <div class="bottom">O</div>
+  </div>
 
-  <main>
-    <section class="counter-box">
-      <div class="label">총 클릭 수</div>
-      <div id="totalCount">0</div>
-      <div id="todayCount">오늘 0회</div>
-    </section>
-
-    <section class="switch-area">
-      <div id="switch" class="switch red">
-        <div class="switch-top">I</div>
-        <div class="switch-bottom">O</div>
-      </div>
-
-      <p id="clickText">위아래로 눌러보세요</p>
-    </section>
-
-    <section class="progress-box">
-      <div id="nextRewardText">다음 보상까지 100회</div>
-      <div class="progress">
-        <div id="progressBar"></div>
-      </div>
-    </section>
-
-    <button id="adBtn">광고 보면 10분 동안 클릭 x2</button>
-
-    <section class="button-list">
-      <h2>버튼 종류</h2>
-
-      <div id="buttonList"></div>
-    </section>
-  </main>
-
+  <div id="hint">위아래로 문지르세요</div>
+  <div id="reward">다음 버튼까지 100회</div>
 </div>
 
 <script src="app.js"></script>
