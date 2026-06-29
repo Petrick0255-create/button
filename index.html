@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>피젯 토이 1 : 버튼</title>
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<div id="app">
+
+  <header>
+    <button id="resetBtn">초기화</button>
+    <h1>피젯 토이 1</h1>
+    <p>딸깍 버튼</p>
+  </header>
+
+  <main>
+    <section class="counter-box">
+      <div class="label">총 클릭 수</div>
+      <div id="totalCount">0</div>
+      <div id="todayCount">오늘 0회</div>
+    </section>
+
+    <section class="switch-area">
+      <div id="switch" class="switch red">
+        <div class="switch-top">I</div>
+        <div class="switch-bottom">O</div>
+      </div>
+
+      <p id="clickText">위아래로 눌러보세요</p>
+    </section>
+
+    <section class="progress-box">
+      <div id="nextRewardText">다음 보상까지 100회</div>
+      <div class="progress">
+        <div id="progressBar"></div>
+      </div>
+    </section>
+
+    <button id="adBtn">광고 보면 10분 동안 클릭 x2</button>
+
+    <section class="button-list">
+      <h2>버튼 종류</h2>
+
+      <div id="buttonList"></div>
+    </section>
+  </main>
+
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
