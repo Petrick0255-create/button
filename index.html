@@ -53,6 +53,7 @@
             <label class="check"><input id="normalOnly" type="checkbox" checked><span>추출 상태가 정상인 문항만 사용</span></label>
           </div>
           <p id="checkpointStatus" class="notice"></p><button id="resumeJob" class="ghost" type="button" hidden>저장 문항 이어서 검토</button>
+          <button id="repairFigure" class="ghost" type="button" hidden>그림만 교정 (필요 시 API 1회)</button>
           <label class="field"><span>이번 문항에만 적용할 추가 지시</span><textarea id="extraPrompt" rows="5" placeholder="예: 표와 힘-시간 그래프를 함께 사용하고 계산량은 줄여 주세요."></textarea></label>
           <div class="actions full"><button id="drawReferences" class="ghost" type="button">참고 문항 다시 뽑기</button><button id="generateButton" class="primary" type="button">문항 생성</button></div>
         </div>
@@ -88,8 +89,9 @@
     </form>
   </dialog>
 
-  <script src="quality.js?v=20260909-4"></script>
-  <script src="checkpoint.js?v=20260909-4"></script>
-  <script src="app.js?v=20260909-4"></script>
+  <script src="quality.js?v=20260909-5"></script>
+  <script src="checkpoint.js?v=20260909-5"></script>
+  <script src="svg-recovery.js?v=20260909-5"></script>
+  <script src="app.js?v=20260909-5"></script>
 </body>
 </html>
