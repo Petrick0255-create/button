@@ -7,12 +7,14 @@ prompt에는 도입·조건·질문만, view에는 ㄱ. ㄴ. ㄷ. 보기만 넣�
 정답뿐 아니라 각 보기의 근거와 조건 충분성을 검증한다. 해결하지 못한 오류가 있으면 검토 상태는 생성 실패로 반환한다.`;
 function normalizeQuestion(q){
   if(!q||typeof q!=="object")throw new Error("문항 응답이 없습니다.");
-  return {...q,choices:(q.choices||[]).map(x=>String(x).replace(/^(?:\s*[①②③④⑤]\s*)+/,"").trim()),answer:String(q.answer||"").trim()};
+  return {...q,view:String(q.view||"").replace(/^\s*(?:<보기>|〈보기〉|\[보기\])\s*/,""),choices:(q.choices||[]).map(x=>String(x).replace(/^(?:\s*(?:[①②③④⑤]|[1-5][.)])\s*)+/,"").trim()),answer:normalizeAnswer(q.answer)};
 }
+function normalizeAnswer(value){const s=String(value??"").trim().replace(/^정답\s*[:：]?\s*/,"");const m=s.match(/^([①②③④⑤1-5])\s*(?:번)?\s*(?:[.)])?$/);return m?(/[1-5]/.test(m[1])?"①②③④⑤"[Number(m[1])-1]:m[1]):s;}
 function validateQuestion(q){
   const errors=[];
   if(!q.prompt?.trim())errors.push("발문 누락");
-  if(q.choices?.length!==5||q.choices.some(x=>!x.trim())||new Set(q.choices).size!==5)errors.push("선택지는 서로 다른 5개여야 합니다");
+  if(q.choices?.length!==5||q.choices.some(x=>!x.trim()))errors.push("선택지 누락: 내용이 있는 5개가 필요합니다");
+  else {const key=x=>/^[ㄱㄴㄷ,·ㆍ\s]+$/.test(x)?[...x.matchAll(/[ㄱㄴㄷ]/g)].map(m=>m[0]).sort().join(""):x.replace(/\s+/g,"");const seen=new Map();q.choices.forEach((x,i)=>{const k=key(x);if(seen.has(k))errors.push(`선택지 내용 중복: ${seen.get(k)+1}번과 ${i+1}번 (${x})`);else seen.set(k,i);});}
   if(!/^[①②③④⑤]$/.test(q.answer))errors.push("정답 번호 오류");
   if(/<보기>|〈보기〉/.test(q.prompt)&&/ㄱ\s*[.．]/.test(q.prompt))errors.push("발문에 보기가 섞여 있습니다");
   if(q.view&&!/^\s*ㄱ\s*[.．]/.test(q.view))errors.push("보기 칸에 그림 설명 등 다른 내용이 있습니다");
