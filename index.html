@@ -29,12 +29,11 @@
         <div><span class="kicker">WRITING RULES</span><h1>문항과 해설의 표현을 고정합니다.</h1></div>
         <div class="actions"><button id="resetRules" class="ghost" type="button">기본값 복원</button><button id="saveRules" class="primary" type="button">규칙 저장</button></div>
       </div>
+      <p class="rule-help">기본 형식을 직접 수정할 수 있습니다. 특정 문항에만 필요한 지시는 문제 생성 탭에 입력하세요.</p>
       <div class="rule-grid">
-        <label class="field wide"><span>공통 원칙</span><textarea id="commonRules" rows="8"></textarea></label>
-        <label class="field"><span>문제 분석 규칙</span><textarea id="analysisRules" rows="12"></textarea></label>
-        <label class="field"><span>정답·오답 풀이 규칙</span><textarea id="solutionRules" rows="12"></textarea></label>
-        <label class="field"><span>기호·단위·표기 규칙</span><textarea id="notationRules" rows="10"></textarea></label>
-        <label class="field"><span>금지 표현·오류 방지 규칙</span><textarea id="forbiddenRules" rows="10"></textarea></label>
+        <label class="field"><span>문항 형식·표기 규칙</span><textarea id="questionRules" rows="18"></textarea></label>
+        <label class="field"><span>해설 작성 규칙</span><textarea id="explanationRules" rows="18"></textarea></label>
+        <label class="field wide"><span>추가 규칙</span><textarea id="customRules" rows="7" placeholder="예: 생명과학 문항에서는 과정의 선후 관계를 먼저 밝힌다."></textarea></label>
       </div>
     </section>
 
