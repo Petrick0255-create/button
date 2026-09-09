@@ -20,8 +20,9 @@
   <main class="shell">
     <nav class="tabs" aria-label="제작 단계">
       <button class="tab active" data-tab="rules" type="button">01 규칙 입력</button>
-      <button class="tab" data-tab="generate" type="button">02 문제 생성</button>
-      <button class="tab" data-tab="result" type="button">03 결과</button>
+      <button class="tab" data-tab="prompt" type="button">02 프롬프트 생성</button>
+      <button class="tab" data-tab="generate" type="button">03 문제 생성</button>
+      <button class="tab" data-tab="result" type="button">04 결과</button>
     </nav>
 
     <section id="rulesPanel" class="panel active">
@@ -34,6 +35,27 @@
         <label class="field"><span>문항 형식·표기 규칙</span><textarea id="questionRules" rows="18"></textarea></label>
         <label class="field"><span>해설 작성 규칙</span><textarea id="explanationRules" rows="18"></textarea></label>
         <label class="field wide"><span>추가 규칙</span><textarea id="customRules" rows="7" placeholder="예: 생명과학 문항에서는 과정의 선후 관계를 먼저 밝힌다."></textarea></label>
+      </div>
+    </section>
+
+    <section id="promptPanel" class="panel">
+      <div class="panel-head"><div><span class="kicker">PROMPT BUILDER</span><h1>유형과 키워드로 출제 지시문을 만듭니다.</h1></div><span class="status">API 사용 없음</span></div>
+      <div class="generator-layout">
+        <div class="control-card">
+          <div class="form-grid">
+            <label class="field"><span>유형</span><select id="promptType"><option value="">유형 불러오는 중</option></select></label>
+            <label class="field"><span>난이도</span><select id="promptDifficulty"><option>1.0</option><option>1.5</option><option selected>2.0</option><option>2.5</option><option>3.0</option></select></label>
+            <label class="field"><span>자료 구성</span><select id="promptFormat"><option value="auto">키워드에 맞게 자동</option><option>표</option><option>그래프</option><option>그림</option><option>그래프와 표</option><option>실험·탐구</option></select></label>
+          </div>
+          <label class="field"><span>키워드 (쉼표 또는 줄바꿈으로 구분)</span><textarea id="promptKeywords" rows="5" placeholder="예: 충돌, 힘-시간 그래프, 반발, 질량 비교"></textarea></label>
+          <p class="notice">기존 유형별 설계 기준에 키워드와 자료 구성 지시를 결합합니다. 생성된 프롬프트는 직접 수정할 수 있습니다.</p>
+          <button id="buildPrompt" class="primary" type="button">프롬프트 만들기</button>
+        </div>
+        <div class="control-card">
+          <label class="field"><span>생성된 출제 프롬프트</span><textarea id="builtPrompt" rows="21" placeholder="유형과 키워드를 입력한 뒤 프롬프트 만들기를 눌러 주세요."></textarea></label>
+          <p id="promptBuilderStatus" class="notice" role="status">프롬프트 생성에는 토큰이 들지 않습니다.</p>
+          <div class="actions full"><button id="copyPrompt" class="ghost" type="button" disabled>복사</button><button id="applyPrompt" class="primary" type="button" disabled>문제 생성에 적용</button></div>
+        </div>
       </div>
     </section>
 
@@ -93,5 +115,6 @@
   <script src="checkpoint.js?v=20260909-5"></script>
   <script src="svg-recovery.js?v=20260909-5"></script>
   <script src="app.js?v=20260909-5"></script>
+  <script src="prompt-builder.js?v=20260909-6"></script>
 </body>
 </html>
