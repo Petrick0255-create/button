@@ -1,27 +1,93 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>딸깍</title>
-  <link rel="stylesheet" href="style.css" />
-  <script src="https://cdn.jsdelivr.net/npm/@apps-in-toss/web-framework@1.5.1/dist-web/index.min.js"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="평가원 형식의 통합과학 문항을 참고 문항 기반으로 생성하고 검토합니다.">
+  <title>AI 통합과학 문항 제작기 | J&amp;B LAB</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <header class="topbar">
+    <a class="brand" href="https://petrick0255-create.github.io/science-lab/"><span>J&amp;B</span><b>LAB</b></a>
+    <div>
+      <strong>AI 통합과학 문항 제작기</strong>
+      <small>REFERENCE · GENERATE · VERIFY</small>
+    </div>
+    <button id="apiButton" class="ghost" type="button">API 설정</button>
+  </header>
 
-<div id="unlockTabs"></div>
+  <main class="shell">
+    <nav class="tabs" aria-label="제작 단계">
+      <button class="tab active" data-tab="rules" type="button">01 규칙 입력</button>
+      <button class="tab" data-tab="generate" type="button">02 문제 생성</button>
+      <button class="tab" data-tab="result" type="button">03 결과</button>
+    </nav>
 
-<div id="count">0</div>
+    <section id="rulesPanel" class="panel active">
+      <div class="panel-head">
+        <div><span class="kicker">WRITING RULES</span><h1>문항과 해설의 표현을 고정합니다.</h1></div>
+        <div class="actions"><button id="resetRules" class="ghost" type="button">기본값 복원</button><button id="saveRules" class="primary" type="button">규칙 저장</button></div>
+      </div>
+      <div class="rule-grid">
+        <label class="field wide"><span>공통 원칙</span><textarea id="commonRules" rows="8"></textarea></label>
+        <label class="field"><span>문제 분석 규칙</span><textarea id="analysisRules" rows="12"></textarea></label>
+        <label class="field"><span>정답·오답 풀이 규칙</span><textarea id="solutionRules" rows="12"></textarea></label>
+        <label class="field"><span>기호·단위·표기 규칙</span><textarea id="notationRules" rows="10"></textarea></label>
+        <label class="field"><span>금지 표현·오류 방지 규칙</span><textarea id="forbiddenRules" rows="10"></textarea></label>
+      </div>
+    </section>
 
-<div id="switch" class="switch basic off">
-  <div class="top">I</div>
-  <div class="bar"></div>
-  <div class="bottom">O</div>
-</div>
+    <section id="generatePanel" class="panel">
+      <div class="panel-head">
+        <div><span class="kicker">QUESTION DESIGN</span><h1>유형을 고르고 참고 문항을 조합합니다.</h1></div>
+        <span id="dataStatus" class="status">DB 불러오는 중</span>
+      </div>
+      <div class="generator-layout">
+        <div class="control-card">
+          <div class="form-grid">
+            <label class="field"><span>유형</span><select id="typeSelect"><option value="">불러오는 중</option></select></label>
+            <label class="field"><span>난이도</span><select id="difficulty"><option>1.0</option><option>1.5</option><option selected>2.0</option><option>2.5</option><option>3.0</option></select></label>
+            <label class="field"><span>문항 번호</span><input id="questionNumber" type="number" min="1" max="25" value="17"></label>
+            <label class="field"><span>참고 문항 수</span><select id="referenceCount"><option value="2">2문항</option><option value="3" selected>3문항</option></select></label>
+            <label class="field"><span>자료 형식</span><select id="formatSelect"><option value="auto">자동 조합</option><option value="표·자료">표·자료</option><option value="그래프">그래프</option><option value="그림">그림</option><option value="실험·탐구">실험·탐구</option><option value="보기형">보기형</option></select></label>
+            <label class="check"><input id="normalOnly" type="checkbox" checked><span>추출 상태가 정상인 문항만 사용</span></label>
+          </div>
+          <label class="field"><span>이번 문항에만 적용할 추가 지시</span><textarea id="extraPrompt" rows="5" placeholder="예: 표와 힘-시간 그래프를 함께 사용하고 계산량은 줄여 주세요."></textarea></label>
+          <div class="actions full"><button id="drawReferences" class="ghost" type="button">참고 문항 다시 뽑기</button><button id="generateButton" class="primary" type="button">문항 생성</button></div>
+        </div>
+        <aside class="reference-area">
+          <div class="subhead"><h2>참고 문항</h2><small>카드를 눌러 제외하거나 다시 포함할 수 있습니다.</small></div>
+          <div id="referenceList" class="reference-list"><div class="empty">유형을 선택해 주세요.</div></div>
+        </aside>
+      </div>
+      <div id="progressBox" class="progress-box" hidden>
+        <div class="progress-track"><span id="progressBar"></span></div>
+        <strong id="progressTitle">준비 중</strong><p id="progressText"></p>
+      </div>
+    </section>
 
-<div id="toast">새로운 버튼 발견!</div>
-<div id="coinLayer"></div>
+    <section id="resultPanel" class="panel">
+      <div class="panel-head">
+        <div><span class="kicker">FINAL OUTPUT</span><h1>검토가 끝난 최종 문항입니다.</h1></div>
+        <div class="actions"><button id="copyQuestion" class="ghost" type="button">문제 복사</button><button id="copyAll" class="primary" type="button">전체 복사</button></div>
+      </div>
+      <div id="resultEmpty" class="result-empty">아직 생성된 문항이 없습니다.</div>
+      <article id="resultContent" class="paper" hidden></article>
+      <details id="reviewDetails" class="review" hidden><summary>검토 기록 보기</summary><div id="reviewContent"></div></details>
+    </section>
+  </main>
 
-<script src="app.js"></script>
+  <dialog id="apiDialog">
+    <form method="dialog" class="dialog-card">
+      <div class="dialog-head"><div><span class="kicker">LOCAL SETTING</span><h2>Gemini API 설정</h2></div><button value="cancel" class="icon-button" aria-label="닫기">×</button></div>
+      <label class="field"><span>API 키</span><input id="apiKey" type="password" autocomplete="off" placeholder="AIza…"></label>
+      <label class="field"><span>모델</span><input id="modelName" type="text" value="gemini-3.5-flash"></label>
+      <p class="notice">키는 이 브라우저의 로컬 저장소에만 저장되며 사이트 파일에는 포함되지 않습니다.</p>
+      <div class="actions"><button id="removeApi" value="cancel" class="danger" type="button">키 삭제</button><button id="saveApi" value="cancel" class="primary" type="button">저장</button></div>
+    </form>
+  </dialog>
+
+  <script src="app.js"></script>
 </body>
 </html>
